@@ -1,16 +1,22 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Camera } from 'lucide-react';
+import pic1 from "/amma beach.jpg"
+import pic2 from "/amma nana function .jpg"
+import pic3 from "/amma nana munnar.jpg"
+import pic4 from "/mani and amma ammamam house.jpg"
+import pic5 from "/mani and amma beach.jpg"
+import pic6 from "/mani and amma gruhapravesham.jpg"
 
 const MemoriesSection = () => {
   // Placeholder photos - replace with actual photo URLs
   const photos = [
-    { id: 1, url: 'https://images.pexels.com/photos/1300402/pexels-photo-1300402.jpeg?auto=compress&cs=tinysrgb&w=400', caption: 'Beautiful memories ❤️' },
-    { id: 2, url: 'https://images.pexels.com/photos/1170986/pexels-photo-1170986.jpeg?auto=compress&cs=tinysrgb&w=400', caption: 'Special moments 💖' },
-    { id: 3, url: 'https://images.pexels.com/photos/1141853/pexels-photo-1141853.jpeg?auto=compress&cs=tinysrgb&w=400', caption: 'Love and laughter 😊' },
-    { id: 4, url: 'https://images.pexels.com/photos/1024993/pexels-photo-1024993.jpeg?auto=compress&cs=tinysrgb&w=400', caption: 'Forever grateful 🙏' },
-    { id: 5, url: 'https://images.pexels.com/photos/1157557/pexels-photo-1157557.jpeg?auto=compress&cs=tinysrgb&w=400', caption: 'Cherished times 💕' },
-    { id: 6, url: 'https://images.pexels.com/photos/842849/pexels-photo-842849.jpeg?auto=compress&cs=tinysrgb&w=400', caption: 'Sweet memories 🌸' }
+    { id: 1, url: pic1, caption: 'Beautiful memories ❤️' },
+    { id: 2, url: pic5, caption: 'Special moments 💖' },
+    { id: 3, url: pic3, caption: 'Love and laughter 😊' },
+    { id: 4, url: pic6, caption: 'Forever grateful 🙏' },
+    { id: 5, url: pic2, caption: 'Cherished times 💕' },
+    { id: 6, url: pic4, caption: 'Sweet memories 🌸' }
   ];
 
   return (
