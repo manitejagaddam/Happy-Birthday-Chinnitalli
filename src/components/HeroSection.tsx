@@ -109,8 +109,8 @@ const HeroSection = () => {
             className="flex items-center justify-center gap-4"
           >
             <Heart className="text-red-400 w-12 h-12" />
-            <h2 className="text-5xl md:text-7xl font-bold text-pink-100">
-              Mom
+            <h2 className="text-5xl md:text-7xl font-bold text-pink-500">
+              అమ్మ
             </h2>
             <Heart className="text-red-400 w-12 h-12" />
           </motion.div>
