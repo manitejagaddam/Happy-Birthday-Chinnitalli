@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Play, Pause, Volume2, VolumeX } from 'lucide-react';
+import song from "/audio/song.mp3"
 
 const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
@@ -9,8 +10,8 @@ const MusicPlayer = () => {
   const togglePlay = () => {
     setIsPlaying(!isPlaying);
     // Here you would add actual audio playback logic
-    // const audio = new Audio('/birthday-song.mp3');
-    // if (isPlaying) audio.pause(); else audio.play();
+    const audio = new Audio(song);
+    if (isPlaying) audio.pause(); else audio.play();
   };
 
   const toggleMute = () => {

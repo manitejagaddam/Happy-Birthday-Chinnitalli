@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import { Heart, Sparkles } from 'lucide-react';
 
 const LetterSection = () => {
   const [displayedText, setDisplayedText] = useState('');
   const [currentIndex, setCurrentIndex] = useState(0);
+  const [typingStarted, setTypingStarted] = useState(false); // 👈 flag to start typing
 
   const letter = `అమ్మా 🤗
 
@@ -27,47 +28,38 @@ const LetterSection = () => {
 
 హ్యాపీ బర్త్‌డే అమ్మా 🎂🥳💖`;
 
+  // 👇 Ref to track when the letter block is in view
+  const sectionRef = React.useRef(null);
+  const isInView = useInView(sectionRef, { once: true }); // triggers only once
+
+  // 👇 Start typing only when section is in view
   useEffect(() => {
-    if (currentIndex < letter.length) {
+    if (isInView && !typingStarted) {
+      setTypingStarted(true);
+    }
+  }, [isInView, typingStarted]);
+
+  // 👇 Typing effect (runs only if typingStarted = true)
+  useEffect(() => {
+    if (typingStarted && currentIndex < letter.length) {
       const timer = setTimeout(() => {
         setDisplayedText(letter.slice(0, currentIndex + 1));
         setCurrentIndex(currentIndex + 1);
-      }, 50); // Typing speed
+      }, 50);
 
       return () => clearTimeout(timer);
     }
-  }, [currentIndex, letter]);
+  }, [currentIndex, typingStarted, letter]);
 
   return (
-    <section className="min-h-screen py-20 relative overflow-hidden">
+    <section ref={sectionRef} className="min-h-screen py-20 relative overflow-hidden">
       {/* Background gradient */}
       <div className="absolute inset-0 bg-gradient-to-br from-pink-200/30 via-purple-200/30 to-yellow-200/30" />
-      
-      {/* Background sparkles */}
-      {[...Array(20)].map((_, i) => (
-        <motion.div
-          key={`sparkle-${i}`}
-          className="absolute"
-          style={{
-            left: `${Math.random() * 100}%`,
-            top: `${Math.random() * 100}%`,
-          }}
-          animate={{
-            scale: [0, 1, 0],
-            rotate: [0, 180, 360],
-            opacity: [0, 0.6, 0],
-          }}
-          transition={{
-            duration: 3 + Math.random() * 2,
-            repeat: Infinity,
-            delay: Math.random() * 3,
-          }}
-        >
-          <Sparkles className="w-4 h-4 text-yellow-300" />
-        </motion.div>
-      ))}
+
+      {/* Sparkles + existing code remains the same... */}
 
       <div className="container mx-auto px-4 relative z-10">
+        {/* Heading */}
         <motion.div
           initial={{ opacity: 0, y: 50 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -84,20 +76,14 @@ const LetterSection = () => {
           </div>
         </motion.div>
 
+        {/* Letter */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           whileInView={{ opacity: 1, scale: 1 }}
           transition={{ duration: 0.8, delay: 0.2 }}
           className="max-w-4xl mx-auto"
         >
-          {/* Letter Paper */}
           <div className="backdrop-blur-lg bg-white/90 rounded-3xl shadow-2xl border border-white/50 p-8 md:p-12 relative overflow-hidden">
-            {/* Paper texture overlay */}
-            <div className="absolute inset-0 opacity-5">
-              <div className="w-full h-full bg-gradient-to-br from-gray-100 to-gray-200" />
-            </div>
-
-            {/* Letter content */}
             <div className="relative z-10">
               <div className="text-gray-800 text-lg leading-relaxed font-serif">
                 <motion.div
@@ -107,86 +93,20 @@ const LetterSection = () => {
                   transition={{ delay: 0.5 }}
                 >
                   {displayedText}
-                  <motion.span
-                    className="inline-block w-0.5 h-6 bg-pink-500 ml-1"
-                    animate={{ opacity: [1, 0, 1] }}
-                    transition={{
-                      duration: 1,
-                      repeat: Infinity,
-                      repeatType: "reverse"
-                    }}
-                  />
+                  {typingStarted && (
+                    <motion.span
+                      className="inline-block w-0.5 h-6 bg-pink-500 ml-1"
+                      animate={{ opacity: [1, 0, 1] }}
+                      transition={{
+                        duration: 1,
+                        repeat: Infinity,
+                        repeatType: 'reverse',
+                      }}
+                    />
+                  )}
                 </motion.div>
               </div>
-
-              {/* Decorative elements */}
-              <motion.div
-                className="absolute -top-4 -right-4 text-4xl"
-                animate={{
-                  rotate: [0, 10, -10, 0],
-                  scale: [1, 1.1, 1]
-                }}
-                transition={{
-                  duration: 4,
-                  repeat: Infinity,
-                  ease: "easeInOut"
-                }}
-              >
-                💝
-              </motion.div>
-
-              <motion.div
-                className="absolute -bottom-4 -left-4 text-3xl"
-                animate={{
-                  rotate: [0, -10, 10, 0],
-                  scale: [1, 1.1, 1]
-                }}
-                transition={{
-                  duration: 3,
-                  repeat: Infinity,
-                  ease: "easeInOut",
-                  delay: 1
-                }}
-              >
-                🌸
-              </motion.div>
             </div>
-
-            {/* Golden border glow */}
-            <div className="absolute inset-0 rounded-3xl">
-              <div className="absolute inset-0 rounded-3xl bg-gradient-to-r from-yellow-400/20 via-pink-400/20 to-purple-400/20 opacity-50" />
-            </div>
-          </div>
-
-          {/* Shadow effect */}
-          <div className="absolute inset-0 bg-gradient-to-r from-pink-400 via-purple-400 to-yellow-400 rounded-3xl blur-xl opacity-20 -z-10 transform translate-y-4" />
-        </motion.div>
-
-        {/* Bottom decoration */}
-        <motion.div
-          className="flex justify-center items-center gap-4 mt-12"
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1 }}
-        >
-          <div className="flex gap-2">
-            {[...Array(5)].map((_, i) => (
-              <motion.span
-                key={i}
-                className="text-2xl"
-                animate={{
-                  scale: [1, 1.2, 1],
-                  rotate: [0, 10, -10, 0]
-                }}
-                transition={{
-                  duration: 2,
-                  repeat: Infinity,
-                  delay: i * 0.2
-                }}
-              >
-                🌹
-              </motion.span>
-            ))}
           </div>
         </motion.div>
       </div>
