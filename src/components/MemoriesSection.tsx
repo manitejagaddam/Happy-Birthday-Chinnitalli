@@ -1,20 +1,21 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Heart, Camera } from 'lucide-react';
-import pic1 from "/amma beach.jpg"
+import pic1 from "/mani amma akka2.jpg"
 import pic2 from "/amma nana function .jpg"
 import pic3 from "/amma nana munnar.jpg"
 import pic4 from "/mani and amma ammamam house.jpg"
-import pic5 from "/mani and amma beach.jpg"
-import pic6 from "/mani and amma gruhapravesham.jpg"
+// import pic5 from "/mani and amma beach.jpg"
+import pic5 from "/akka amma nana.jpg"
+import pic6 from "/family.jpg"
 
 const MemoriesSection = () => {
   // Placeholder photos - replace with actual photo URLs
   const photos = [
     { id: 1, url: pic1, caption: 'Beautiful memories ❤️' },
     { id: 2, url: pic5, caption: 'Special moments 💖' },
-    { id: 3, url: pic3, caption: 'Love and laughter 😊' },
     { id: 4, url: pic6, caption: 'Forever grateful 🙏' },
+    { id: 3, url: pic3, caption: 'Love and laughter 😊' },
     { id: 5, url: pic2, caption: 'Cherished times 💕' },
     { id: 6, url: pic4, caption: 'Sweet memories 🌸' }
   ];
@@ -122,7 +123,7 @@ const MemoriesSection = () => {
           transition={{ delay: 0.8 }}
         >
           <Camera className="w-8 h-8 text-pink-300" />
-          <span className="text-pink-200 text-lg font-medium">Made with love</span>
+          <span className="text-pink-500 text-lg font-medium">Made with love by Akka & Thammudu</span>
           <Heart className="w-8 h-8 text-red-400 fill-current" />
         </motion.div>
       </div>

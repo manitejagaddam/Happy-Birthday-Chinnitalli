@@ -1,22 +1,72 @@
-import React, { useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Play, Pause, Volume2, VolumeX } from 'lucide-react';
-import song from "/audio/song.mp3"
+import React, { useState, useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { Play, Pause, Volume2, VolumeX } from "lucide-react";
+import song from "/audio/song.mp3";
 
 const MusicPlayer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
-  const [isMuted, setIsMuted] = useState(false);
+  const [isMuted, setIsMuted] = useState(true);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  useEffect(() => {
+    audioRef.current = new Audio(song);
+    const audio = audioRef.current;
+    audio.loop = true;
+    audio.volume = 1.0;
+    audio.currentTime = 40;
+    audio.muted = true;
+
+    const tryPlay = async () => {
+      try {
+        await audio.play();
+        setIsPlaying(true);
+
+        // 🔥 unmute after 2 seconds
+        setTimeout(() => {
+          audio.muted = false;
+          setIsMuted(false);
+        }, 2000);
+
+        // cleanup listener once successful
+        document.removeEventListener("click", tryPlay);
+        document.removeEventListener("keydown", tryPlay);
+      } catch (err) {
+        console.log("⚠️ Autoplay blocked, waiting for interaction.");
+      }
+    };
+
+    // try immediately
+    tryPlay();
+
+    // fallback: wait for first interaction
+    document.addEventListener("click", tryPlay);
+    document.addEventListener("keydown", tryPlay);
+
+    return () => {
+      audio.pause();
+      document.removeEventListener("click", tryPlay);
+      document.removeEventListener("keydown", tryPlay);
+    };
+  }, []);
 
   const togglePlay = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    if (isPlaying) {
+      audio.pause();
+    } else {
+      audio.play();
+    }
     setIsPlaying(!isPlaying);
-    // Here you would add actual audio playback logic
-    const audio = new Audio(song);
-    if (isPlaying) audio.pause(); else audio.play();
   };
 
   const toggleMute = () => {
+    const audio = audioRef.current;
+    if (!audio) return;
+
+    audio.muted = !isMuted;
     setIsMuted(!isMuted);
-    // Here you would add actual mute logic
   };
 
   return (
@@ -74,7 +124,7 @@ const MusicPlayer = () => {
                   className="w-1 h-3 bg-pink-300 rounded-full"
                   style={{
                     animationDelay: `${i * 0.1}s`,
-                    animation: isPlaying ? 'bounce 1s infinite' : 'none'
+                    animation: isPlaying ? "bounce 1s infinite" : "none",
                   }}
                 />
               ))}
@@ -106,20 +156,20 @@ const MusicPlayer = () => {
                   className="absolute text-pink-300 text-sm pointer-events-none"
                   style={{
                     left: `${30 + i * 20}%`,
-                    top: '100%',
+                    top: "100%",
                   }}
                   initial={{ y: 0, opacity: 1, scale: 0 }}
                   animate={{
                     y: -40,
                     opacity: [1, 1, 0],
                     scale: [0, 1, 0],
-                    rotate: [0, 10, -10, 0]
+                    rotate: [0, 10, -10, 0],
                   }}
                   transition={{
                     duration: 2,
                     repeat: Infinity,
                     delay: i * 0.5,
-                    ease: "easeOut"
+                    ease: "easeOut",
                   }}
                 >
                   ♪
